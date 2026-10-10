@@ -1,0 +1,638 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GetWork - Find Work, Hire Workers</title>
+
+<style>
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+body {
+  font-family: Arial, sans-serif;
+  color: #17365d;
+  background: #f4f9ff;
+}
+header {
+  background: #102c52;
+  color: white;
+  padding: 18px 5%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 15px;
+}
+.logo {
+  font-size: 27px;
+  font-weight: bold;
+}
+.logo span, .highlight {
+  color: #ffb91f;
+}
+nav {
+  display: flex;
+  gap: 18px;
+  flex-wrap: wrap;
+}
+nav a {
+  color: white;
+  text-decoration: none;
+  font-weight: bold;
+}
+button {
+  cursor: pointer;
+  border: none;
+  border-radius: 8px;
+  padding: 12px 18px;
+  font-size: 15px;
+  font-weight: bold;
+  margin: 4px;
+}
+.blue {
+  background: #0875df;
+  color: white;
+}
+.yellow {
+  background: #ffb91f;
+  color: #17365d;
+}
+.white {
+  background: white;
+  color: #17365d;
+  border: 1px solid #b9cce0;
+}
+.hero {
+  padding: 65px 7%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 35px;
+  flex-wrap: wrap;
+  background: linear-gradient(120deg, #eaf6ff, #cce8ff);
+}
+.hero-text {
+  flex: 1;
+  min-width: 280px;
+}
+.hero h1 {
+  font-size: clamp(35px, 5vw, 52px);
+  line-height: 1.2;
+  margin-bottom: 20px;
+}
+.hero p {
+  font-size: 17px;
+  line-height: 1.7;
+  margin-bottom: 20px;
+}
+.hero-art {
+  flex: 1;
+  min-width: 250px;
+  text-align: center;
+  font-size: clamp(55px, 8vw, 95px);
+  padding: 25px 0;
+}
+.search {
+  display: flex;
+  max-width: 520px;
+  margin-top: 15px;
+}
+input, select, textarea {
+  width: 100%;
+  padding: 13px;
+  margin: 7px 0 14px;
+  border: 1px solid #bdcddd;
+  border-radius: 7px;
+  font-size: 15px;
+}
+.search input {
+  min-width: 0;
+  margin: 0;
+}
+section {
+  padding: 48px 6%;
+}
+h2 {
+  font-size: 30px;
+  margin-bottom: 12px;
+}
+.subtitle {
+  color: #65768b;
+  margin-bottom: 25px;
+  line-height: 1.6;
+}
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 18px;
+  margin-top: 25px;
+}
+.card {
+  background: white;
+  border-radius: 13px;
+  padding: 24px 18px;
+  box-shadow: 0 4px 15px #17365d12;
+  border: 1px solid #e0eaf4;
+}
+.category {
+  text-align: center;
+  font-size: 18px;
+  cursor: pointer;
+}
+.category .icon {
+  display: block;
+  font-size: 40px;
+  margin-bottom: 12px;
+}
+.card p {
+  line-height: 1.6;
+  margin: 12px 0;
+  color: #65768b;
+}
+.steps {
+  background: #e9f5ff;
+}
+.step {
+  text-align: center;
+}
+.step .icon {
+  font-size: 42px;
+  margin-bottom: 12px;
+}
+.stats {
+  background: #102c52;
+  color: white;
+  text-align: center;
+}
+.stat {
+  font-size: 30px;
+  color: #ffb91f;
+  font-weight: bold;
+}
+.cta {
+  background: #fff3d3;
+  border-radius: 16px;
+  padding: 30px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 15px;
+}
+footer {
+  background: #102c52;
+  color: white;
+  padding: 35px 6%;
+  line-height: 2;
+}
+footer a {
+  color: #d8e8ff;
+  text-decoration: none;
+  margin-right: 15px;
+}
+.modal {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: #0009;
+  z-index: 10;
+  padding: 15px;
+  align-items: center;
+  justify-content: center;
+}
+.modal-box {
+  background: white;
+  width: 100%;
+  max-width: 460px;
+  max-height: 90vh;
+  overflow-y: auto;
+  padding: 25px;
+  border-radius: 15px;
+}
+.modal-box h2 {
+  font-size: 25px;
+}
+.modal-box label {
+  font-weight: bold;
+}
+.close {
+  float: right;
+  background: #e9eef5;
+}
+.modal-box button[type="submit"] {
+  width: 100%;
+}
+.message {
+  color: #08753c;
+  background: #e5f8eb;
+  padding: 12px;
+  margin-top: 12px;
+  border-radius: 8px;
+  display: none;
+  line-height: 1.5;
+}
+@media(max-width:600px) {
+  header {
+    justify-content: center;
+  }
+  nav {
+    justify-content: center;
+  }
+  .hero {
+    padding: 40px 6%;
+  }
+  section {
+    padding: 35px 5%;
+  }
+  .search {
+    width: 100%;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+  <div class="logo">👷 Get<span>Work</span></div>
+
+  <nav>
+    <a href="#home">Home</a>
+    <a href="#jobs">Find Jobs</a>
+    <a href="#workers">Find Workers</a>
+    <a href="#post">Post a Job</a>
+  </nav>
+
+  <div>
+    <button class="white" onclick="openForm('login')">Login</button>
+    <button class="yellow" onclick="openForm('register')">Register</button>
+  </div>
+</header>
+
+<main>
+<section class="hero" id="home">
+  <div class="hero-text">
+    <h1>Find Work.<br>Hire Workers.<br>
+      <span class="highlight">All in One Place.</span>
+    </h1>
+
+    <p>
+      GetWork connects skilled and unskilled workers
+      with people who need reliable labour, quickly and easily.
+    </p>
+
+    <button class="blue" onclick="openForm('hire')">
+      👷 Hire a Labour
+    </button>
+
+    <button class="white" onclick="openForm('find')">
+      🔍 Find Work
+    </button>
+
+    <div class="search">
+      <input id="searchInput"
+        placeholder="Search jobs or workers...">
+      <button class="blue" onclick="searchJobs()">Search</button>
+    </div>
+  </div>
+
+  <div class="hero-art">
+    👨🏻‍🔧 👷🏻‍♂️ 👩🏽‍🌾
+    <p style="font-size:20px;color:#1769b0">
+      Skilled People Build a Better Tomorrow
+    </p>
+  </div>
+</section>
+
+<section id="categories">
+  <h2>Popular Categories</h2>
+  <p class="subtitle">Choose the type of work you need.</p>
+
+  <div class="grid">
+    <div class="card category" onclick="chooseCategory('Construction')">
+      <span class="icon">🧱</span>Construction
+    </div>
+    <div class="card category" onclick="chooseCategory('Painting')">
+      <span class="icon">🖌️</span>Painting
+    </div>
+    <div class="card category" onclick="chooseCategory('Cleaning')">
+      <span class="icon">🧹</span>Cleaning
+    </div>
+    <div class="card category" onclick="chooseCategory('Farming')">
+      <span class="icon">🌱</span>Farming
+    </div>
+    <div class="card category" onclick="chooseCategory('Plumbing')">
+      <span class="icon">🔧</span>Plumbing
+    </div>
+    <div class="card category" onclick="chooseCategory('Electrician')">
+      <span class="icon">⚡</span>Electrician
+    </div>
+  </div>
+</section>
+
+<section class="steps">
+  <h2>How GetWork Works</h2>
+  <p class="subtitle">Three simple steps to get started.</p>
+
+  <div class="grid">
+    <div class="card step">
+      <div class="icon">👤</div>
+      <h3>1. Register</h3>
+      <p>Create an account as a worker or employer.</p>
+    </div>
+    <div class="card step">
+      <div class="icon">🔎</div>
+      <h3>2. Search</h3>
+      <p>Find jobs or workers based on your needs.</p>
+    </div>
+    <div class="card step">
+      <div class="icon">🤝</div>
+      <h3>3. Connect</h3>
+      <p>Apply for jobs or find someone to help.</p>
+    </div>
+  </div>
+</section>
+
+<section id="jobs">
+  <h2>Latest Job Opportunities</h2>
+  <p class="subtitle">Explore example job listings.</p>
+  <div class="grid" id="jobList"></div>
+</section>
+
+<section id="workers">
+  <h2>Find Workers</h2>
+  <p class="subtitle">Explore example worker profiles.</p>
+  <div class="grid" id="workerList"></div>
+</section>
+
+<section class="stats">
+  <div class="grid">
+    <div><div class="stat">1200+</div>Example Jobs</div>
+    <div><div class="stat">850+</div>Worker Profiles</div>
+    <div><div class="stat">6</div>Categories</div>
+    <div><div class="stat">24/7</div>Browse Anytime</div>
+  </div>
+</section>
+
+<section id="post">
+  <div class="cta">
+    <div>
+      <h2>Have a Job to Get Done?</h2>
+      <p>Post your requirements and find workers.</p>
+    </div>
+    <button class="blue" onclick="openForm('post')">
+      + Post a Job
+    </button>
+  </div>
+</section>
+
+<section>
+  <h2>Why Choose GetWork?</h2>
+  <div class="grid">
+    <div class="card">
+      <h3>⚡ Quick and Easy</h3>
+      <p>Search jobs and workers easily.</p>
+    </div>
+    <div class="card">
+      <h3>🤝 Direct Connection</h3>
+      <p>Connect with people who need your skills.</p>
+    </div>
+    <div class="card">
+      <h3>📱 Mobile Friendly</h3>
+      <p>Use GetWork on phones and computers.</p>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer>
+  <h2>👷 Get<span class="highlight">Work</span></h2>
+  <p>Work • Hire • Grow</p>
+  <p>
+    <a href="#home">Home</a>
+    <a href="#jobs">Find Jobs</a>
+    <a href="#workers">Find Workers</a>
+    <a href="#post">Post a Job</a>
+  </p>
+  <p>© 2026 GetWork. All rights reserved.</p>
+</footer>
+
+<div class="modal" id="modal">
+  <div class="modal-box">
+    <button class="close" onclick="closeForm()">✕</button>
+    <h2 id="formTitle">GetWork</h2>
+    <p class="subtitle" id="formSubtitle"></p>
+    <form id="mainForm">
+      <div id="formFields"></div>
+      <button class="blue" type="submit" id="submitBtn">
+        Submit
+      </button>
+    </form>
+    <div class="message" id="message"></div>
+  </div>
+</div>
+
+<script>
+const jobs = [
+  {title:"Construction Helper",category:"Construction",
+   place:"Hyderabad",pay:"₹800 per day",icon:"🧱"},
+  {title:"House Painter",category:"Painting",
+   place:"Karimnagar",pay:"₹900 per day",icon:"🖌️"},
+  {title:"Cleaning Worker",category:"Cleaning",
+   place:"Warangal",pay:"₹600 per day",icon:"🧹"},
+  {title:"Farm Worker",category:"Farming",
+   place:"Nizamabad",pay:"₹700 per day",icon:"🌱"},
+  {title:"Plumber",category:"Plumbing",
+   place:"Hyderabad",pay:"₹1000 per day",icon:"🔧"},
+  {title:"Electrician Assistant",category:"Electrician",
+   place:"Secunderabad",pay:"₹900 per day",icon:"⚡"}
+];
+
+const workers = [
+  {name:"Ravi Kumar",skill:"Construction",place:"Hyderabad",icon:"👷"},
+  {name:"Sita Devi",skill:"Cleaning",place:"Karimnagar",icon:"🧹"},
+  {name:"Imran Ali",skill:"Painting",place:"Warangal",icon:"🖌️"},
+  {name:"Lakshmi",skill:"Farming",place:"Nizamabad",icon:"🌱"},
+  {name:"Ramesh",skill:"Plumbing",place:"Hyderabad",icon:"🔧"},
+  {name:"Arun",skill:"Electrician",place:"Secunderabad",icon:"⚡"}
+];
+
+function displayJobs(list) {
+  document.getElementById("jobList").innerHTML =
+    list.map(j => `
+      <div class="card">
+        <h3>${j.icon} ${j.title}</h3>
+        <p>Category: ${j.category}</p>
+        <p>📍 ${j.place}</p>
+        <p>💰 ${j.pay}</p>
+        <button class="blue"
+          onclick="openForm('find')">Apply for Job</button>
+      </div>
+    `).join("") || "<p>No matching jobs found.</p>";
+}
+
+function displayWorkers() {
+  document.getElementById("workerList").innerHTML =
+    workers.map(w => `
+      <div class="card">
+        <h3>${w.icon} ${w.name}</h3>
+        <p>Skill: ${w.skill}</p>
+        <p>📍 ${w.place}</p>
+        <button class="blue"
+          onclick="openForm('hire')">Contact / Hire</button>
+      </div>
+    `).join("");
+}
+
+displayJobs(jobs);
+displayWorkers();
+
+function searchJobs() {
+  const q = document.getElementById("searchInput")
+    .value.toLowerCase().trim();
+
+  const result = jobs.filter(j =>
+    (j.title + " " + j.category + " " + j.place)
+      .toLowerCase().includes(q)
+  );
+
+  displayJobs(result);
+  document.getElementById("jobs").scrollIntoView({
+    behavior:"smooth"
+  });
+}
+
+function chooseCategory(category) {
+  document.getElementById("searchInput").value = category;
+  searchJobs();
+}
+
+const formTypes = {
+  login: {
+    title:"Login",
+    subtitle:"Welcome back to GetWork.",
+    fields:[
+      ["Email Address","email"],
+      ["Password","password"]
+    ],
+    button:"Login"
+  },
+  register: {
+    title:"Register",
+    subtitle:"Create your GetWork account.",
+    fields:[
+      ["Full Name","text"],
+      ["Email Address","email"],
+      ["Phone Number","tel"],
+      ["Password","password"],
+      ["Account Type","select:Worker,Employer,Both"]
+    ],
+    button:"Create Account"
+  },
+  hire: {
+    title:"Hire a Labour",
+    subtitle:"Tell us about the worker you need.",
+    fields:[
+      ["Your Name","text"],
+      ["Phone Number","tel"],
+      ["Work Category","select:Construction,Painting,Cleaning,Farming,Plumbing,Electrician,Other"],
+      ["Work Location","text"],
+      ["Work Details","textarea"]
+    ],
+    button:"Find Workers"
+  },
+  find: {
+    title:"Find Work",
+    subtitle:"Enter your skills and preferred location.",
+    fields:[
+      ["Full Name","text"],
+      ["Phone Number","tel"],
+      ["Your Skill","select:Construction,Painting,Cleaning,Farming,Plumbing,Electrician,Other"],
+      ["Preferred Location","text"],
+      ["Experience","select:Fresher,1-2 years,3-5 years,5+ years"]
+    ],
+    button:"Find Jobs"
+  },
+  post: {
+    title:"Post a Job",
+    subtitle:"Share your job requirements.",
+    fields:[
+      ["Employer Name","text"],
+      ["Phone Number","tel"],
+      ["Job Title","text"],
+      ["Category","select:Construction,Painting,Cleaning,Farming,Plumbing,Electrician,Other"],
+      ["Location","text"],
+      ["Salary or Budget","text"],
+      ["Job Description","textarea"]
+    ],
+    button:"Submit Job"
+  }
+};
+
+function openForm(type) {
+  const data = formTypes[type];
+  document.getElementById("formTitle").textContent = data.title;
+  document.getElementById("formSubtitle").textContent = data.subtitle;
+  document.getElementById("submitBtn").textContent = data.button;
+  document.getElementById("message").style.display = "none";
+  document.getElementById("mainForm").dataset.type = type;
+
+  document.getElementById("formFields").innerHTML =
+    data.fields.map((field,i) => {
+      const label = field[0];
+      const kind = field[1];
+      let input;
+
+      if (kind.startsWith("select:")) {
+        const options = kind.substring(7).split(",");
+        input = `<select name="field${i}" required>
+          <option value="">Choose ${label}</option>
+          ${options.map(o => `<option>${o}</option>`).join("")}
+        </select>`;
+      } else if (kind === "textarea") {
+        input = `<textarea name="field${i}" required></textarea>`;
+      } else {
+        input = `<input name="field${i}" type="${kind}"
+          placeholder="${label}" required>`;
+      }
+
+      return `<label>${label}</label>${input}`;
+    }).join("");
+
+  document.getElementById("modal").style.display = "flex";
+}
+
+function closeForm() {
+  document.getElementById("modal").style.display = "none";
+}
+
+document.getElementById("mainForm").addEventListener("submit", function(e) {
+  e.preventDefault();
+
+  const type = this.dataset.type;
+  const message = document.getElementById("message");
+
+  const responses = {
+    login:"Demo login form submitted. Real account login needs a backend.",
+    register:"Registration form completed! A real account needs a backend.",
+    hire:"Your worker request is ready. No worker has been contacted.",
+    find:"Your work preferences are ready. Browse the job listings.",
+    post:"Your job details are ready. A backend is needed to publish them."
+  };
+
+  message.textContent = responses[type];
+  message.style.display = "block";
+});
+
+document.getElementById("modal").addEventListener("click", function(e) {
+  if (e.target === this) closeForm();
+});
+</script>
+
+</body>
+  </html>
+  
